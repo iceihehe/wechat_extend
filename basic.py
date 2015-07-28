@@ -4,6 +4,8 @@
 
 from __future__ import print_function, unicode_literals
 
+import requests
+
 from wechat_sdk import WechatBasic
 
 
@@ -15,7 +17,7 @@ class WechatExtend(WechatBasic):
     def __init__(self, *args, **kwargs):
         super(WechatExtend, self).__init__(*args, **kwargs)
 
-    def get_material_list(self, type, offset=0, count=20):
+    def get_material_list(self, media_type, offset=0, count=20):
         '''
         获取(永久)素材列表
         '''
@@ -24,15 +26,15 @@ class WechatExtend(WechatBasic):
         return self._post(
             url='https://api.weixin.qq.com/cgi-bin/material/batchget_material',
             data={
-                'type': type,
+                'type': media_type,
                 'offset': offset,
                 'count': count
             }
         )
 
-    def add_permanent_material(self, articles):
+    def add_permanent_news(self, articles):
         '''
-        新增（永久）素材列表
+        新增图文素材
         articles示例:
         articles = [
             {
@@ -53,5 +55,35 @@ class WechatExtend(WechatBasic):
             url='https://api.weixin.qq.com/cgi-bin/material/add_news',
             data={
                 'articles': articles
+            }
+        )
+
+    def add_permanent_material(self, media_type, media_file):
+        '''
+        新增永久其他类型素材
+        '''
+        self._check_appid_appsecret()
+
+        if isinstance(media_file, file):
+            extension = media_file.name.split('.')[-1]
+        ext = {
+            'jpg': 'image/jpeg',
+            'jpeg': 'image/jpeg',
+            'amr': 'audio/amr',
+            'mp3': 'audio/mpeg',
+            'mp4': 'video/mp4',
+        }
+        filename = media_file.name.split('/')[-1]
+
+        return requests.post(
+            url='https://api.weixin.qq.com/cgi-bin/material/add_material',
+            params={
+                'access_token': self.access_token,
+            },
+            data={
+                'type': media_type,
+            },
+            files={
+                'media': (filename, media_file, ext[extension])
             }
         )
