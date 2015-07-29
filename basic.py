@@ -113,7 +113,7 @@ class WechatExtend(WechatBasic):
         }
         '''
 
-        _check_appid_appsecret()
+        self._check_appid_appsecret()
 
         return self._post(
             url='https://api.weixin.qq.com/cgi-bin/media/uploadnews',
