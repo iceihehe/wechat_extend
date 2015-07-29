@@ -34,28 +34,29 @@ class WechatExtend(WechatBasic):
 
     def add_permanent_news(self, articles):
         '''
-        新增图文素材
+        新增永久图文素材
         articles示例:
-        articles = [
-            {
-                'title': xx,
-                'thumb_media_id': xx,
-                'author': xx,
-                'digest': xx,
-                'show_cover_pic': xx,
-                'content': xx,
-                'content_source_url': xx,
-            },
-            //如果是多图文，还有...
-        ]
+        {
+            articles: [
+                {
+                    'title': xx,
+                
+                    'thumb_media_id': xx, //永久mediaID
+                    'author': xx,
+                    'digest': xx,
+                    'show_cover_pic': xx,
+                    'content': xx,
+                    'content_source_url': xx,
+                },
+                //如果是多图文，还有...
+            ]
+        }
         '''
         self._check_appid_appsecret()
 
         return self._post(
             url='https://api.weixin.qq.com/cgi-bin/material/add_news',
-            data={
-                'articles': articles
-            }
+            data=articles
         )
 
     def add_permanent_material(self, media_type, media_file):
@@ -86,4 +87,57 @@ class WechatExtend(WechatBasic):
             files={
                 'media': (filename, media_file, ext[extension])
             }
+        )
+
+    def upload_news(self, articles):
+        '''
+        上传图文消息素材
+        但是能不能用有待测试
+        post数据实例
+        {
+            'articles': [
+                {
+                    'thumb_media_id': 'xxxxxx',
+                    'author': 'xxx',
+                    'title': 'xxxx',
+                    'content_source_url': 'xxx',
+                    'content': 'xxxx',
+                    'digest': 'xxxxxx',
+                    'show_cover_pic': '1',
+                },
+                {
+                    ....
+                    'show_cover_pic': '0',
+                }
+            ]
+        }
+        '''
+
+        _check_appid_appsecret()
+
+        return self._post(
+            url='https://api.weixin.qq.com/cgi-bin/media/uploadnews',
+            data=articles
+        )
+
+    def preview(self, user_id, msgtype, media_id=None, content=None):
+        '''
+        预览接口
+        '''
+        self._check_appid_appsecret()
+
+        data = {'touser': user_id, 'msgtype': msgtype}
+
+        if msgtype == 'mpnews':
+            data.update(
+                {'mpnews': {'media_id': media_id}}
+            )
+        elif msgtype == 'text':
+            data.update(
+                {'text': {'content': content}}
+            )
+
+        return self._post(
+            url='https://api.weixin.qq.com/cgi-bin/message/mass/preview',
+            data=data
         )
