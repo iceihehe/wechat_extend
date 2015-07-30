@@ -286,3 +286,14 @@ class WechatExtend(WechatBasic):
             url='https://api.weixin.qq.com/cgi-bin/message/mass/sendall',
             data=data
         )
+
+    def get_mass_send_status(self, msg_id):
+        '''
+        查询群发消息发送状态
+        '''
+        self._check_appid_appsecret()
+
+        return self._post(
+            url='https://api.weixin.qq.com/cgi-bin/message/mass/get',
+            data={'msg_id': msg_id}
+        )
