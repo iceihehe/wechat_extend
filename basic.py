@@ -87,10 +87,48 @@ class WechatExtend(WechatBasic):
             }
         )
 
+    def get_permanent_material(self, media_id):
+        '''
+        获取永久素材
+        '''
+        self._check_appid_appsecret()
+        
+        return self._post(
+            url='https://api.weixin.qq.com/cgi-bin/material/get_material',
+            data={'media_id': media_id}
+        )
+
+    def delete_permanent_material(self, media_id):
+        '''
+        删除永久素材
+        '''
+        self._check_appid_appsecret()
+
+        return self._post(
+            url='https://api.weixin.qq.com/cgi-bin/material/del_material',
+            data={'media_id': media_id}
+        )
+
+    def update_permanent_material(self, media_id, articles, index=0):
+        '''
+        修改永久图文素材
+        articles是一个字典，因为一次只能改一个
+        '''
+        self._check_appid_appsecret()
+
+        return self._post(
+            url='https://api.weixin.qq.com/cgi-bin/material/update_news',
+            data={
+                'media_id': media_id,
+                'index': index,
+                'articles': articles,
+            }
+        )
+
     def upload_news(self, articles):
         '''
         上传图文消息素材
-        但是能不能用有待测试
+        但是不是永久的有待测试
         post数据实例
         articles是个列表
         [
@@ -148,5 +186,103 @@ class WechatExtend(WechatBasic):
 
         return self._post(
             url='https://api.weixin.qq.com/cgi-bin/message/mass/preview',
+            data=data
+        )
+
+    def mass_send_by_openid(self, msgtype, user_ids, media_id=None, content=None):
+        '''
+        根据openid列表群发
+        '''
+        self._check_appid_appsecret()
+
+        some_types = [
+            'mpnews',
+            'voice',
+            'mpvideo',
+            'image',
+        ]
+
+        data = {'touser': user_id, 'msgtype': msgtype}
+
+        if msgtype in some_types:
+            data.update(
+                {msgtype: {'media_id': media_id}}
+            )
+        elif msgtype == 'text':
+            data.update(
+                {'text': {'content': content}}
+            )
+        elif msgtype == 'wxcard':
+            pass
+
+        return self._post(
+            url='https://api.weixin.qq.com/cgi-bin/message/mass/preview',
+            data=data
+        )
+
+    def mass_send_by_openid(self, msgtype, user_ids, media_id=None, content=None):
+        '''
+        根据openid列表群发
+        user_ids是个列表
+        '''
+        self._check_appid_appsecret()
+
+        some_types = [
+            'mpnews',
+            'voice',
+            'mpvideo',
+            'image',
+        ]
+
+        data = {'touser': user_id, 'msgtype': msgtype, 'touser': user_ids}
+
+        if msgtype in some_types:
+            data.update(
+                {msgtype: {'media_id': media_id}}
+            )
+        elif msgtype == 'text':
+            data.update(
+                {'text': {'content': content}}
+            )
+        elif msgtype == 'wxcard':
+            pass
+
+        return self._post(
+            url='https://api.weixin.qq.com/cgi-bin/message/mass/send',
+            data=data
+        )
+
+    def mass_send_by_group(self, msgtype, is_to_all=False, group_id='0', media_id=None, title=None, content=None):
+        '''
+        根据组群发
+        '''
+        self._check_appid_appsecret()
+
+        data = {
+            'filter': {'is_to_all': is_to_all, 'group_id': group_id},
+            'msgtype': msgtype
+        }
+
+        some_types = [
+            'mpnews',
+            'voice',
+            'image',
+        ]
+
+        if msgtype in some_types:
+            data.update(
+                {msgtype: {'media_id': media_id}}
+            )
+        elif msgtype == 'text':
+            data.update(
+                {'text': {'content': content}}
+            )
+        elif msgtype == 'wxcard':
+            pass
+        elif msgtype == 'video':
+            pass
+
+        return self._post(
+            url='https://api.weixin.qq.com/cgi-bin/message/mass/sendall',
             data=data
         )
