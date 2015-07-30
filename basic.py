@@ -120,22 +120,34 @@ class WechatExtend(WechatBasic):
             data=articles
         )
 
-    def preview(self, user_id, msgtype, media_id=None, content=None):
+    def preview(self, msgtype, user_id=None, user_name=None, media_id=None, content=None):
         '''
         预览接口
         '''
         self._check_appid_appsecret()
 
-        data = {'touser': user_id, 'msgtype': msgtype}
+        some_types = [
+            'mpnews',
+            'voice',
+            'mpvideo',
+            'image',
+        ]
 
-        if msgtype == 'mpnews':
+        if user_name:
+            data = {'towxname': user_name, 'msgtype': msgtype}
+        else:
+            data = {'touser': user_id, 'msgtype': msgtype}
+
+        if msgtype in some_types:
             data.update(
-                {'mpnews': {'media_id': media_id}}
+                {msgtype: {'media_id': media_id}}
             )
         elif msgtype == 'text':
             data.update(
                 {'text': {'content': content}}
             )
+        elif msgtype == 'wxcard':
+            pass
 
         return self._post(
             url='https://api.weixin.qq.com/cgi-bin/message/mass/preview',
