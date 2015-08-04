@@ -31,11 +31,11 @@ class WechatExtend(WechatBasic):
             kwargs["params"] = {
                 "access_token": self.access_token,
             }
-        if isinstance(kwargs.get("data", ""), dict):
-            if not kwargs.get('files'):
-                body = json.dumps(kwargs["data"], ensure_ascii=False)
-                body = body.encode('utf8')
-                kwargs["data"] = body
+        if isinstance(kwargs.get("data", ""), dict) and \
+                not kwargs.get('files'):
+            body = json.dumps(kwargs["data"], ensure_ascii=False)
+            body = body.encode('utf8')
+            kwargs["data"] = body
 
         r = requests.request(
             method=method,
