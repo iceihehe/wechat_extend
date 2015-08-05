@@ -43,7 +43,11 @@ class WechatExtend(WechatBasic):
             **kwargs
         )
         r.raise_for_status()
-        response_json = r.json()
+        try:
+            response_json = r.json()
+        except ValueError:
+            response_json = r
+
         self._check_official_error(response_json)
         return response_json
 
