@@ -90,7 +90,7 @@ class WechatExtend(WechatBasic):
             data={'articles': articles}
         )
 
-    def add_permanent_material(self, media_type, media_file, extension=''):
+    def add_permanent_material(self, media_type, media_file, extension='jpg'):
         '''
         新增永久其他类型素材
         media_file就是个file object
