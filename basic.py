@@ -303,3 +303,37 @@ class WechatExtend(WechatBasic):
             url='https://api.weixin.qq.com/cgi-bin/message/mass/get',
             data={'msg_id': msg_id}
         )
+
+    def get_user_summary(self, begin_date, end_date):
+        '''
+        获取用户增减数据(最大时间跨度7天)
+        格式为'2014-12-02'
+        end_date的最大值为昨天
+        begin和end的最大差值<=6
+        '''
+        self._check_appid_appsecret()
+
+        return self._post(
+            url='https://api.weixin.qq.com/datacube/getusersummary',
+            data={
+                'begin_date': begin_date,
+                'end_date': end_date,
+            }
+        )
+
+    def get_user_cumulate(self, begin_date, end_date):
+        '''
+        获取累计用户数据(最大时间跨度7天)
+        格式为'2014-12-02'
+        end_date的最大值为昨天
+        begin和end的最大差值<=6
+        '''
+        self._check_appid_appsecret()
+
+        return self._post(
+            url='https://api.weixin.qq.com/datacube/getusercumulate',
+            data={
+                'begin_date': begin_date,
+                'end_date': end_date,
+            }
+        )
