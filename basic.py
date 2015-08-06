@@ -350,11 +350,10 @@ class WechatExtend(WechatBasic):
 
         return url_base.format(self._WechatBasic__appid, urllib.quote_plus(redirect_uri), scope, state)
 
-    def exchange_code_for_access_token(self, code):
+    def exchange_code_for_oauth_access_token(self, code):
         '''
         用code换取网页授权的access_token和openid
         '''
-
         self._check_appid_appsecret()
 
         return self._post(
@@ -364,5 +363,36 @@ class WechatExtend(WechatBasic):
                 'secret': self._WechatBasic__appsecret,
                 'code': code,
                 'grant_type': 'authorization_code',
+            }
+        )
+
+    def refresh_oauth_access_token(self, refresh_token):
+        '''
+        刷新access_token
+        这个参数是从exchange_code_for_oauth_access_token方法获得的
+        '''
+        self._check_appid_appsecret()
+
+        return self._post(
+            url='https://api.weixin.qq.com/sns/oauth2/refresh_token',
+            params={
+                'appid': self._WechatBasic__appid,
+                'grant_type': 'refresh_token',
+                'refresh_token': refresh_token,
+            }
+        )
+
+    def get_oauth_user_info(self, access_token, openid, lang='zh_CN'):
+        '''
+        获取用户信息
+        '''
+        self._check_appid_appsecret()
+
+        return self._get(
+            url='https://api.weixin.qq.com/sns/userinfo',
+            params={
+                'access_token': access_token,
+                'openid': openid,
+                'lang': lang,
             }
         )
