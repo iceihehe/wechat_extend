@@ -9,5 +9,5 @@ from const import appid, appsecret
 
 w = WechatExtend(appid=appid, appsecret=appsecret)
 
-r = w.get_user_cumulate('2015-7-30', '2015-8-5')
+r = w.generate_oauth_url('http://gejin.eatornot.cn/')
 print(r)

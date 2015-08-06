@@ -5,6 +5,7 @@
 from __future__ import print_function, unicode_literals
 
 import requests
+import urllib
 import json
 
 from wechat_sdk import WechatBasic
@@ -17,6 +18,8 @@ class WechatExtend(WechatBasic):
     '''
     def __init__(self, *args, **kwargs):
         super(WechatExtend, self).__init__(*args, **kwargs)
+        # self.__appid = kwargs['appid']
+        # self.__appsecret = kwargs['appsecret']
 
     def _request(self, method, url, **kwargs):
         """
@@ -162,9 +165,10 @@ class WechatExtend(WechatBasic):
     def upload_news(self, articles):
         '''
         上传图文消息素材
-        但是不是永久的有待测试
+        确实不是永久的,只管3天
         post数据实例
         articles是个列表
+        thumb_media_id是个临时素材的id
         [
             {
                 'thumb_media_id': 'xxxxxx',
@@ -337,3 +341,11 @@ class WechatExtend(WechatBasic):
                 'end_date': end_date,
             }
         )
+
+    def generate_oauth_url(self, redirect_uri, scope='snsapi_base', state=''):
+        '''
+        生成网页授权的链接
+        '''
+        url_base = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid={0}&redirect_uri={1}&response_type=code&scope={2}&state={3}#wechat_redirect'
+
+        return url_base.format(self._WechatBasic__appid, urllib.quote_plus(redirect_uri), scope, state)
