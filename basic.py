@@ -349,3 +349,20 @@ class WechatExtend(WechatBasic):
         url_base = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid={0}&redirect_uri={1}&response_type=code&scope={2}&state={3}#wechat_redirect'
 
         return url_base.format(self._WechatBasic__appid, urllib.quote_plus(redirect_uri), scope, state)
+
+    def exchange_code_for_access_token(self, code):
+        '''
+        用code换取网页授权的access_token和openid
+        '''
+
+        self._check_appid_appsecret()
+
+        return self._post(
+            url='https://api.weixin.qq.com/sns/oauth2/access_token',
+            params={
+                'appid': self._WechatBasic__appid,
+                'secret': self._WechatBasic__appsecret,
+                'code': code,
+                'grant_type': 'authorization_code',
+            }
+        )
