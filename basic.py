@@ -346,9 +346,15 @@ class WechatExtend(WechatBasic):
         '''
         生成网页授权的链接
         '''
-        url_base = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid={0}&redirect_uri={1}&response_type=code&scope={2}&state={3}#wechat_redirect'
+        url_base = 'https://open.weixin.qq.com/connect/oauth2/authorize?'\
+            'appid={0}&redirect_uri={1}&response_type=code&scope={2}&state={3}'\
+            '#wechat_redirect'
 
-        return url_base.format(self._WechatBasic__appid, urllib.quote_plus(redirect_uri), scope, state)
+        return url_base.format(
+            self._WechatBasic__appid, urllib.quote_plus(redirect_uri),
+            scope,
+            state
+        )
 
     def exchange_code_for_oauth_access_token(self, code):
         '''
