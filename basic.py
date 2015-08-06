@@ -396,3 +396,16 @@ class WechatExtend(WechatBasic):
                 'lang': lang,
             }
         )
+
+    def validate_oauth_access_token(self, access_token, openid):
+        '''
+        验证access_token是否有效
+        '''
+
+        return self._get(
+            url='https://api.weixin.qq.com/sns/auth',
+            params={
+                'access_token': access_token,
+                'openid': openid,
+            }
+        )
