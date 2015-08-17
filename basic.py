@@ -415,3 +415,29 @@ class WechatExtend(WechatBasic):
                 'openid': openid,
             }
         )
+
+    def add_kfaccount(self, kf_account, nickname, password=''):
+        '''
+        添加客服账号
+        '''
+        data = {
+            'kf_account': kf_account,
+            'nickname': nickname,
+        }
+
+        if password:
+            data.update({'password': password})
+
+        return self._post(
+            url='https://api.weixin.qq.com/customservice/kfaccount/add',
+            data=data,
+        )
+
+    def get_kflist(self):
+        '''
+        获取客服账号列表
+        '''
+
+        return self._get(
+            url='https://api.weixin.qq.com/cgi-bin/customservice/getkflist',
+        )
