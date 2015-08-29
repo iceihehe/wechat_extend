@@ -478,8 +478,8 @@ class WechatExtend(WechatBasic):
             pass
         elif msgtype == 'music':
             pass
-
-        print(data)
+        elif msgtype == 'news':
+            pass
 
         return self._post(
             url='https://api.weixin.qq.com/cgi-bin/message/custom/send',
