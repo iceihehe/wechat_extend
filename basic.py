@@ -441,3 +441,39 @@ class WechatExtend(WechatBasic):
         return self._get(
             url='https://api.weixin.qq.com/cgi-bin/customservice/getkflist',
         )
+
+    def send_kfmessage(self, openid, msgtype, content=None, media_id=None):
+        '''
+        发送客服消息
+        '''
+
+        self._check_appid_appsecret()
+
+        data = {
+            'msgtype': msgtype,
+            'touser': openid,
+        }
+
+        some_types = [
+            'mpnews',
+            'voice',
+            'image',
+        ]
+
+        if msgtype in some_types:
+            data.update(
+                {msgtype: {'media_id': media_id}}
+            )
+        elif msgtype == 'text':
+            data.update(
+                {'text': {'content': content}}
+            )
+        elif msgtype == 'wxcard':
+            pass
+        elif msgtype == 'video':
+            pass
+
+        return self._post(
+            url='https://api.weixin.qq.com/cgi-bin/message/custom/send',
+            data=data,
+        )

@@ -9,5 +9,6 @@ from const import appid, appsecret
 
 w = WechatExtend(appid=appid, appsecret=appsecret)
 
-r = w.add_kfaccount('haha@chengduyilifang', 'haha')
+# r = w.add_kfaccount('haha@gh_5301ba9ebc1d', 'haha')
+r = w.send_kfmessage('o-LjpsmORiDrUOlpAsN5N739vz48', 'text', content='haha')
 print(r)
