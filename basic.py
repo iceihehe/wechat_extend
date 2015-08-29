@@ -442,9 +442,14 @@ class WechatExtend(WechatBasic):
             url='https://api.weixin.qq.com/cgi-bin/customservice/getkflist',
         )
 
-    def send_kfmessage(self, openid, msgtype, content=None, media_id=None):
+    def send_kfmessage(
+            self, openid, msgtype, content=None, media_id=None,
+            articles=None, music=None
+            ):
         '''
         发送客服消息
+        articles是个列表
+        music是个字典
         '''
 
         self._check_appid_appsecret()
@@ -455,7 +460,6 @@ class WechatExtend(WechatBasic):
         }
 
         some_types = [
-            'mpnews',
             'voice',
             'image',
         ]
@@ -472,6 +476,10 @@ class WechatExtend(WechatBasic):
             pass
         elif msgtype == 'video':
             pass
+        elif msgtype == 'music':
+            pass
+
+        print(data)
 
         return self._post(
             url='https://api.weixin.qq.com/cgi-bin/message/custom/send',
