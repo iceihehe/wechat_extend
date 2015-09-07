@@ -485,3 +485,15 @@ class WechatExtend(WechatBasic):
             url='https://api.weixin.qq.com/cgi-bin/message/custom/send',
             data=data,
         )
+
+    def get_article_summary(self, begin_date, end_date):
+
+        self._check_appid_appsecret()
+
+        return self._post(
+            url='https://api.weixin.qq.com/datacube/getarticlesummary',
+            data={
+                'begin_date': begin_date,
+                'end_date': end_date,
+            }
+        )
