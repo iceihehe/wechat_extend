@@ -112,12 +112,39 @@ class WechatExtend(WechatBasic):
         filename = media_file.name.split('/')[-1]
 
         return self._post(
-            url='https://api.weixin.qq.com/cgi-bin/material/add_material',
+            # url='https://api.weixin.qq.com/cgi-bin/material/add_material',
+            url='https://api.weixin.qq.com/cgi-bin/media/uploadimg',
             params={
                 'access_token': self.access_token,
             },
             data={
                 'type': media_type,
+            },
+            files={
+                'media': (filename, media_file, ext[extension])
+            }
+        )
+
+    def add_permanent_img(self, media_file, extension='jpg'):
+        '''
+        新增永久其他类型素材
+        media_file就是个file object
+        '''
+        self._check_appid_appsecret()
+
+        if isinstance(media_file, file):
+            extension = media_file.name.split('.')[-1]
+        ext = {
+            'jpg': 'image/jpeg',
+            'jpeg': 'image/jpeg',
+            'png': 'image/png',
+        }
+        filename = media_file.name.split('/')[-1]
+
+        return self._post(
+            url='https://api.weixin.qq.com/cgi-bin/media/uploadimg',
+            params={
+                'access_token': self.access_token,
             },
             files={
                 'media': (filename, media_file, ext[extension])
