@@ -442,56 +442,24 @@ class WechatExtend(WechatBasic):
             url='https://api.weixin.qq.com/cgi-bin/customservice/getkflist',
         )
 
-    def send_kfmessage(
-            self, openid, msgtype, content=None, media_id=None,
-            articles=None, music=None
-            ):
-        '''
-        发送客服消息
-        articles是个列表
-        music是个字典
-        '''
-
-        self._check_appid_appsecret()
-
-        data = {
-            'msgtype': msgtype,
-            'touser': openid,
-        }
-
-        some_types = [
-            'voice',
-            'image',
-        ]
-
-        if msgtype in some_types:
-            data.update(
-                {msgtype: {'media_id': media_id}}
-            )
-        elif msgtype == 'text':
-            data.update(
-                {'text': {'content': content}}
-            )
-        elif msgtype == 'wxcard':
-            pass
-        elif msgtype == 'video':
-            pass
-        elif msgtype == 'music':
-            pass
-        elif msgtype == 'news':
-            pass
-
-        return self._post(
-            url='https://api.weixin.qq.com/cgi-bin/message/custom/send',
-            data=data,
-        )
-
     def get_article_summary(self, begin_date, end_date):
 
         self._check_appid_appsecret()
 
         return self._post(
             url='https://api.weixin.qq.com/datacube/getarticlesummary',
+            data={
+                'begin_date': begin_date,
+                'end_date': end_date,
+            }
+        )
+
+    def get_user_read(self, begin_date, end_date):
+
+        self._check_appid_appsecret()
+
+        return self._post(
+            url='https://api.weixin.qq.com/datacube/getuserread',
             data={
                 'begin_date': begin_date,
                 'end_date': end_date,
