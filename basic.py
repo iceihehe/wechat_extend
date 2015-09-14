@@ -454,6 +454,18 @@ class WechatExtend(WechatBasic):
             }
         )
 
+    def get_article_total(self, begin_date, end_date):
+
+        self._check_appid_appsecret()
+
+        return self._post(
+            url='https://api.weixin.qq.com/datacube/getarticletotal',
+            data={
+                'begin_date': begin_date,
+                'end_date': end_date,
+            }
+        )
+
     def get_user_read(self, begin_date, end_date):
 
         self._check_appid_appsecret()

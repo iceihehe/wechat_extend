@@ -9,7 +9,7 @@ from const import appid, appsecret
 
 w = WechatExtend(appid=appid, appsecret=appsecret)
 
-# r = w.add_kfaccount('haha@gh_5301ba9ebc1d', 'haha')
-r = w.send_kfmessage('o-LjpsmORiDrUOlpAsN5N739vz48', 'image', media_id='hR32bzXVtc_j3Xv28lnDebL9Ve4603SyZQuqzhr4wQc')
-# r = w.get_material_list('image')
+t = '2015-8-8'
+
+r = w.get_article_total(t, t)
 print(r)
