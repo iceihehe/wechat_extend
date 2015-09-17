@@ -112,8 +112,7 @@ class WechatExtend(WechatBasic):
         filename = media_file.name.split('/')[-1]
 
         return self._post(
-            # url='https://api.weixin.qq.com/cgi-bin/material/add_material',
-            url='https://api.weixin.qq.com/cgi-bin/media/uploadimg',
+            url='https://api.weixin.qq.com/cgi-bin/material/add_material',
             params={
                 'access_token': self.access_token,
             },
