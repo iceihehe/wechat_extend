@@ -93,7 +93,8 @@ class WechatExtend(WechatBasic):
             data={'articles': articles}
         )
 
-    def add_permanent_material(self, media_type, media_file, extension='jpg'):
+    def add_permanent_material(self, media_type, media_file, extension='jpg',
+                               title='', introduction=''):
         '''
         新增永久其他类型素材
         media_file就是个file object
@@ -110,18 +111,24 @@ class WechatExtend(WechatBasic):
             'mp4': 'video/mp4',
         }
         filename = media_file.name.split('/')[-1]
+        files = {'media': (filename, media_file, ext[extension])}
+
+        data = {'type': media_type}
+
+        if extension in ['mp4']:
+            data.update({
+                'description': json.dumps(
+                    {'title': title, 'introduction': introduction}
+                )
+            })
 
         return self._post(
             url='https://api.weixin.qq.com/cgi-bin/material/add_material',
             params={
                 'access_token': self.access_token,
             },
-            data={
-                'type': media_type,
-            },
-            files={
-                'media': (filename, media_file, ext[extension])
-            }
+            data=data,
+            files=files
         )
 
     def add_permanent_img(self, media_file, extension='jpg'):
